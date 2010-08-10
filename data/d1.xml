@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : data1.xml
+    Created on : August 9, 2010, 2:40 PM
+    Author     : karl
+    Description:
+        Purpose of the document follows.
+-->
+
+<table title="some title is here" ncols="3">
+<row heading="1">
+    <!--one entry for each column of row-->
+    <col type="string">  <!--type is that of column's data-->
+        <string val="title1"/>
+    </col>
+    <col type="url">
+        <string val="title2"/>
+    </col>
+    <col type="float">
+        <string val="title3"/>
+    </col>
+</row>
+<row>
+    <!--column data: bg=cell background; fg=font color-->
+    <string val="cell data" bg="yellow" fg="red"/>
+    <url val="name" href="http://www.foobar.com/stuff.html" hlink="blue"/>
+    <float val="1.23" href="http://foobar"/>
+</row>
+</table>
