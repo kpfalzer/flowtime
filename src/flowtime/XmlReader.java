@@ -26,6 +26,8 @@
  */
 package flowtime;
 import  java.io.FileReader;
+import static flowtime.Util.error;
+import  java.io.IOException;
 import  org.xml.sax.Attributes;
 import  org.xml.sax.ContentHandler;
 import  org.xml.sax.Locator;
@@ -38,33 +40,34 @@ import  org.xml.sax.helpers.XMLReaderFactory;
  * @author kpfalzer
  */
 public class XmlReader {
-    public XmlReader(String fname) {
+    public XmlReader(String fname) throws SAXException {
         m_fname = fname;
-        try {
-            m_rdr = XMLReaderFactory.createXMLReader();
-            m_rdr.setContentHandler(new MyContentHandler());
-            FileReader frdr = new FileReader(m_fname);
-            m_rdr.parse(new InputSource(frdr));
-            frdr.close();
-        }
-        catch (Exception ex) {
-            error(ex);
-        }
+		m_rdr = XMLReaderFactory.createXMLReader();
     }
+
+	public void parse(MyContentHandler handler) throws SAXException, IOException {
+		m_rdr.setContentHandler(handler);
+		FileReader frdr = new FileReader(m_fname);
+		m_rdr.parse(new InputSource(frdr));
+	}
 
     public static void main(String argv[]) {
-        new XmlReader(argv[0]);
-    }
+		try {
+			XmlReader rdr = new XmlReader(argv[0]);
+			rdr.parse(new XmlReader.MyContentHandler());
+		} catch (Exception ex) {
+			error(ex);
+		}
+	}
 
-    private static void error(Exception ex) {
-        ex.printStackTrace();
-        System.exit(1);
-    }
+	protected XMLReader getReader() {
+		return m_rdr;
+	}
 
     private final String    m_fname;
-    private XMLReader       m_rdr;
+    private XMLReader       m_rdr = null;
 
-    private class MyContentHandler implements ContentHandler {
+    public static class MyContentHandler implements ContentHandler {
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
             //TODO
