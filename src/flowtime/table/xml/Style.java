@@ -28,24 +28,22 @@ package flowtime.table.xml;
 import	flowtime.XmlReader;
 import	org.xml.sax.Attributes;
 import  org.xml.sax.XMLReader;
-import  org.xml.sax.ContentHandler;
 import	org.xml.sax.SAXException;
 
 /**
  *
  * @author karl
  */
-public class Style {
+public class Style extends XmlReader.MyContentHandler {
 	public Style(XMLReader rdr, Attributes attr) {
-		this(attr);
-		m_rdr = rdr;
-		m_wasHandler = m_rdr.getContentHandler();
-		m_rdr.setContentHandler(new MyContentHandler());
-	}
-	public Style(Attributes attr) {
+		super(rdr);
+		rdr.setContentHandler(this);
 		m_id = attr.getValue(ID);
 		assert(null != m_id);
 		m_name = attr.getValue(NAME);
+	}
+	public Style(Attributes attr) {
+		this(null,attr);
 	}
 	public String getId() {
 		return m_id;
@@ -53,34 +51,32 @@ public class Style {
 	public String getName() {
 		return m_name;
 	}
-	private String			m_id;
-	private String			m_name;
-	private XMLReader		m_rdr;
-	private ContentHandler	m_wasHandler;
-
+	private final String	m_id;
+	private final String	m_name;
+	private Font			m_font;
+	private Interior		m_interior;
+	private Alignment		m_alignment;
+	
 	private static final String ID = "ss:ID";
 	private static final String NAME = "ss:Name";
 
-	private class MyContentHandler extends XmlReader.MyContentHandler {
-		@Override
-		public void startElement(String uri, String localName, String qName, Attributes atts)
-				throws SAXException {
-			if (qName.equals("Font")) {
-				Font font = new Font(atts);
-			} else if (qName.equals("Interior")) {
-				Interior intr = new Interior(atts);
-			} else if (qName.equals("Alignment")) {
-				Alignment align = new Alignment(atts);
-			}
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException {
-			if (qName.equals("Style")) {
-				m_rdr.setContentHandler(m_wasHandler);
-			}
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes atts)
+			throws SAXException {
+		if (qName.equals("Font")) {
+			m_font = new Font(atts);
+		} else if (qName.equals("Interior")) {
+			m_interior = new Interior(atts);
+		} else if (qName.equals("Alignment")) {
+			m_alignment = new Alignment(atts);
 		}
 	}
 
+	@Override
+	public void endElement(String uri, String localName, String qName)
+			throws SAXException {
+		if (qName.equals("Style")) {
+			restoreHandler();
+		}
+	}
 }

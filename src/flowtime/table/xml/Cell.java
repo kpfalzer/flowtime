@@ -25,53 +25,27 @@
  *************************************************************************
  */
 package flowtime.table.xml;
-import	flowtime.XmlReader;
-import static flowtime.Util.error;
-import  java.io.IOException;
 import	org.xml.sax.Attributes;
-import	org.xml.sax.SAXException;
-import  org.xml.sax.XMLReader;
 
 /**
  *
  * @author karl
  */
-public class TableReader extends XmlReader {
-	public TableReader(String fname) throws SAXException, IOException {
-		super(fname);
-		m_rdr = getReader();
-		super.parse(new TableReader.MyContentHandler());
+public class Cell {
+	public Cell(Attributes atts) {
+		m_styleId = atts.getValue(STYLE);
+		assert(null != m_styleId);
+		m_href = atts.getValue(HREF);
 	}
 
-	public static void main(String argv[]) {
-		try {
-			new TableReader(argv[0]);
-		} catch (Exception ex) {
-			error(ex);
-		}
+	public void addData(Data data) {
+		m_data = data;
 	}
 
-	private XMLReader	m_rdr;
-	private Table		m_table = new Table();
+	private final String	m_styleId;
+	private final String	m_href;
+	private Data			m_data;
 
-	private class MyContentHandler extends XmlReader.MyContentHandler {
-		@Override
-		public void startElement(String uri, String localName, String qName, Attributes atts) 
-				throws SAXException {
-			if (qName.equals("Style")) {
-				Style style = new Style(m_rdr, atts);
-				m_table.addStyle(style);
-			} else if (qName.equals("Table")) {
-				m_table.setColCnt(Integer.parseInt(atts.getValue("ss:ExpandedColumnCount")));
-			} else if (qName.equals("Row")) {
-				Row row = new Row(m_rdr, atts, m_table.getColCnt());
-				m_table.addRow(row);
-			}
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName) 
-				throws SAXException {
-		}
-	}
+	private static final String STYLE = "ss:StyleID";
+	private static final String HREF = "ss:HRef";
 }

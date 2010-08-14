@@ -34,6 +34,7 @@ public class Util {
     public static void error(Exception ex) {
         ex.printStackTrace();
     }
+
 	public static boolean toBool(String s) {
 		return ((null != s) && !s.equals("0"));
 	}

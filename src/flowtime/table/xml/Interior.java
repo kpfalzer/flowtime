@@ -33,6 +33,8 @@ import	org.xml.sax.Attributes;
  */
 public class Interior {
 	public Interior(Attributes attrs) {
-		
+		m_color = attrs.getValue(COLOR);
 	}
+	private final String m_color;
+	private static final String COLOR = "ss:Color";
 }

@@ -68,6 +68,25 @@ public class XmlReader {
     private XMLReader       m_rdr = null;
 
     public static class MyContentHandler implements ContentHandler {
+		protected MyContentHandler() {}
+
+		protected MyContentHandler(XMLReader rdr) {
+			m_reader = rdr;
+			if (null != m_reader) {
+				m_previousHandler = rdr.getContentHandler();
+			}
+		}
+
+		protected void restoreHandler() {
+			m_reader.setContentHandler(m_previousHandler);
+		}
+
+		protected XMLReader getReader() {
+			return m_reader;
+		}
+
+		private XMLReader		m_reader;
+		private	ContentHandler	m_previousHandler;
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
             //TODO
