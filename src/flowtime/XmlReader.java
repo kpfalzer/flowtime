@@ -49,6 +49,7 @@ public class XmlReader {
 		m_rdr.setContentHandler(handler);
 		FileReader frdr = new FileReader(m_fname);
 		m_rdr.parse(new InputSource(frdr));
+		frdr.close();
 	}
 
     public static void main(String argv[]) {

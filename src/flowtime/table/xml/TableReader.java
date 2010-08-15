@@ -31,6 +31,7 @@ import  java.io.IOException;
 import	org.xml.sax.Attributes;
 import	org.xml.sax.SAXException;
 import  org.xml.sax.XMLReader;
+import	javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -41,6 +42,7 @@ public class TableReader extends XmlReader {
 		super(fname);
 		m_rdr = getReader();
 		super.parse(new TableReader.MyContentHandler());
+		m_table.harden();
 	}
 
 	public static void main(String argv[]) {
@@ -49,6 +51,10 @@ public class TableReader extends XmlReader {
 		} catch (Exception ex) {
 			error(ex);
 		}
+	}
+
+	public AbstractTableModel getModel() {
+		return m_table.getModel();
 	}
 
 	private XMLReader	m_rdr;

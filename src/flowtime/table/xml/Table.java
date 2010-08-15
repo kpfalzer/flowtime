@@ -25,10 +25,10 @@
  *************************************************************************
  */
 package flowtime.table.xml;
-import	java.util.Hashtable;
+import	java.util.HashMap;
 import	java.util.Map;
-import	java.util.List;
-import	java.util.LinkedList;
+import	java.util.ArrayList;
+import	javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -36,6 +36,27 @@ import	java.util.LinkedList;
  */
 public class Table {
 	public Table() {}
+
+	public AbstractTableModel getModel() {
+		return new Model();
+	}
+	
+	/**
+	 * Model access subclass compatible with AbstractTableModel.
+	 */
+	private class Model extends AbstractTableModel {
+		public int getColumnCount() {
+			return m_colCnt;
+		}
+
+		public int getRowCount() {
+			return m_rows.size();
+		}
+
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return getCellAt(rowIndex, columnIndex);
+		}
+	}
 
 	public void addStyle(Style s) {
 		m_stylesById.put(s.getId(), s);
@@ -57,7 +78,28 @@ public class Table {
 		m_rows.add(row);
 	}
 
-	private Map<String,Style>	m_stylesById	= new Hashtable<String,Style>();
+	public Row getRowAt(int i) {
+		return m_rows.get(i);
+	}
+
+	public Cell getCellAt(int row, int col) {
+		return getRowAt(row).getCellAt(col);
+	}
+
+	/**
+	 * Link cell styles and trim row count.
+	 */
+	public void harden() {
+		m_rows.trimToSize();
+		for (Row row : m_rows) {
+			for (Cell cell : row.getCells()) {
+				cell.linkStyle(m_stylesById);
+			}
+		}
+	}
+
+	private Map<String,Style>	m_stylesById	= new HashMap<String,Style>();
 	private int					m_colCnt		= -1;
-	private List<Row>			m_rows			= new LinkedList<Row>();
+	private ArrayList<Row>		m_rows			= new ArrayList<Row>(100);
+
 }

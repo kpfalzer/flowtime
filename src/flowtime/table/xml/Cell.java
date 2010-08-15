@@ -25,6 +25,7 @@
  *************************************************************************
  */
 package flowtime.table.xml;
+import	java.util.Map;
 import	org.xml.sax.Attributes;
 
 /**
@@ -33,8 +34,8 @@ import	org.xml.sax.Attributes;
  */
 public class Cell {
 	public Cell(Attributes atts) {
-		m_styleId = atts.getValue(STYLE);
-		assert(null != m_styleId);
+		m_style = new StyleName(atts.getValue(STYLE));
+		assert(null != m_style.asName());
 		m_href = atts.getValue(HREF);
 	}
 
@@ -42,10 +43,53 @@ public class Cell {
 		m_data = data;
 	}
 
-	private final String	m_styleId;
+	public void linkStyle(Map<String,Style> stylesByName) {
+		String key = m_style.asName();
+		m_style = (null == key) ? null : new AsStyle(stylesByName.get(key));
+	}
+
+	public Style getStyle() {
+		assert(m_style instanceof AsStyle);
+		return m_style.asStyle();
+	}
+
+	private IStyle			m_style;
 	private final String	m_href;
 	private Data			m_data;
 
 	private static final String STYLE = "ss:StyleID";
 	private static final String HREF = "ss:HRef";
+
+	/**
+	 * Interface allows initial reference to Style name using StyleName.
+	 * Then, we can link to actual Style using AsStyle.
+	 */
+	private static interface IStyle {
+		public String asName();
+		public Style asStyle();
+	}
+	private static class StyleName implements IStyle {
+		public StyleName(String nm) {
+			m_name = nm;
+		}
+		public String asName() {
+			return m_name;
+		}
+		public Style asStyle() {
+			return null;
+		}
+		private final String	m_name;
+	}
+	private static class AsStyle implements IStyle {
+		public AsStyle(Style style) {
+			m_style = style;
+		}
+		public String asName() {
+			return null;
+		}
+		public Style asStyle() {
+			return m_style;
+		}
+		private final Style	m_style;
+	}
 }

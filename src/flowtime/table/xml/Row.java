@@ -26,8 +26,7 @@
  */
 package flowtime.table.xml;
 import	flowtime.XmlReader;
-import	java.util.List;
-import	java.util.Vector;
+import	java.util.ArrayList;
 import	org.xml.sax.Attributes;
 import  org.xml.sax.XMLReader;
 import	org.xml.sax.SAXException;
@@ -39,18 +38,26 @@ import	org.xml.sax.SAXException;
 public class Row extends XmlReader.MyContentHandler {
 	public Row(XMLReader rdr, Attributes attr, int colCnt) {
 		super(rdr);
-		rdr.setContentHandler(this);
 		assert(0 == attr.getLength());	//dont expect any
-		m_cells = new Vector<Cell>(colCnt);
+		m_cells = new ArrayList<Cell>(colCnt);
+		rdr.setContentHandler(this);
+	}
+
+	public Cell getCellAt(int ix) {
+		return m_cells.get(ix);
+	}
+
+	public Iterable<Cell> getCells() {
+		return m_cells;
 	}
 
 	private void addCell(Cell c) {
 		m_cells.add(c);
 	}
 
-	private List<Cell>	m_cells;
-	private	Cell		m_currentCell;
-	private Data		m_currentData;
+	private ArrayList<Cell>	m_cells;
+	private	Cell			m_currentCell;
+	private Data			m_currentData;
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts)
