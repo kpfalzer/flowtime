@@ -41,6 +41,10 @@ public class Data {
 		m_data = data;
 	}
 
+	public String getData() {
+		return (null == m_data) ? "" : m_data;
+	}
+
 	private final String m_type;
 	private String m_data;
 

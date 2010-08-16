@@ -54,7 +54,12 @@ public class Table {
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return getCellAt(rowIndex, columnIndex);
+			return getCellAt(rowIndex, columnIndex).getData();
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return false;
 		}
 	}
 

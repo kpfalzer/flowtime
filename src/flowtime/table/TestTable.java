@@ -33,23 +33,23 @@ import  java.awt.BorderLayout;
  * @author karl
  */
 public class TestTable {
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI(String xmlFile) {
         //Create and set up the window.
         JFrame frame = new JFrame("TopLevelDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Table table = new Table(false);
+        Table table = new Table(xmlFile,false);
         frame.getContentPane().add(table, BorderLayout.CENTER);
         //Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                createAndShowGUI(args[0]);
             }
         });
     }

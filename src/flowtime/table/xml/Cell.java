@@ -53,6 +53,10 @@ public class Cell {
 		return m_style.asStyle();
 	}
 
+	public String getData() {
+		return m_data.getData();
+	}
+
 	private IStyle			m_style;
 	private final String	m_href;
 	private Data			m_data;

@@ -25,6 +25,8 @@
  *************************************************************************
  */
 package flowtime.table;
+import	flowtime.table.xml.TableReader;
+import static flowtime.Util.error;
 import  javax.swing.JTable;
 import  javax.swing.JPanel;
 import  javax.swing.JScrollPane;
@@ -34,6 +36,7 @@ import  java.awt.Component;
 import  java.awt.event.ComponentAdapter;
 import  java.awt.event.ComponentEvent;
 import  java.awt.GridLayout;
+import	javax.swing.table.TableModel;
 
 /**
  *
@@ -45,14 +48,25 @@ public class Table extends JPanel {
         this(false);
     }
     public Table(boolean horizScroll) {
-        //1 row.  Need gridlayout to get scrollbar correctly shown.
-        super(new GridLayout(1,0));
-        createMVC(horizScroll);
+        this(null, horizScroll);
     }
-
-    private void createMVC(boolean hzSrcoll) {
-        m_model = new Model();
-        m_view = new View(m_model, hzSrcoll);
+	public Table(String xmlFile, boolean hzScroll) {
+		//1 row.  Need gridlayout to get scrollbar correctly shown.
+        super(new GridLayout(1,0));
+		createMVC(hzScroll, xmlFile);
+	}
+    private void createMVC(boolean hzSrcoll, String xmlFile) {
+        if (null == xmlFile) {
+			m_model = new Model();
+			m_view = new View(m_model, hzSrcoll);
+		} else {
+			try {
+				TableReader rdr = new TableReader(xmlFile);
+				m_view = new View(rdr.getModel(), hzSrcoll);
+			} catch (Exception ex) {
+				error(ex);
+			}
+		}
         m_cntlr = new Controller();
         this.add(m_view.m_scrollPane);
         m_view.addResizeListener(this);
@@ -109,13 +123,20 @@ public class Table extends JPanel {
     }
     private class View {
         View(Model model, boolean hzScroll) {
-            m_hzScroll = hzScroll;
             m_table = new JTable(model.data, model.columnNames);
+            init(hzScroll);
+        }
+		View(TableModel model, boolean hzScroll) {
+			m_table = new JTable(model);
+			init(hzScroll);
+		}
+		private void init(boolean hzScroll) {
+            m_hzScroll = hzScroll;
             m_minSize = m_table.getPreferredSize();
             m_table.setPreferredScrollableViewportSize(m_minSize);
             m_table.setAutoResizeMode(m_hzScroll ? JTable.AUTO_RESIZE_OFF : JTable.AUTO_RESIZE_ALL_COLUMNS);
             m_scrollPane = new JScrollPane(m_table);
-        }
+		}
         JComponent getView() {
             return m_scrollPane;
         }
