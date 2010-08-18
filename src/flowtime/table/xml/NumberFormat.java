@@ -24,34 +24,17 @@
  *************************************************************************
  *************************************************************************
  */
-package flowtime.table;
-import  javax.swing.JFrame;
-import  java.awt.BorderLayout;
 
+package flowtime.table.xml;
+import	org.xml.sax.Attributes;
 /**
  *
  * @author karl
  */
-public class TestTable {
-    private static void createAndShowGUI(String xmlFile) {
-        //Create and set up the window.
-        JFrame frame = new JFrame("TopLevelDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Table table = new Table(xmlFile,true);//false);
-        frame.getContentPane().add(table, BorderLayout.CENTER);
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public static void main(final String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI(args[0]);
-            }
-        });
-    }
-
+public class NumberFormat {
+	public NumberFormat(Attributes attrs) {
+		m_format = attrs.getValue(FORMAT);
+	}
+	private final String m_format;
+	private static final String FORMAT = "ss:Format";
 }

@@ -56,6 +56,7 @@ public class Style extends XmlReader.MyContentHandler {
 	private Font			m_font;
 	private Interior		m_interior;
 	private Alignment		m_alignment;
+	private NumberFormat	m_numberFormat;
 	
 	private static final String ID = "ss:ID";
 	private static final String NAME = "ss:Name";
@@ -69,6 +70,8 @@ public class Style extends XmlReader.MyContentHandler {
 			m_interior = new Interior(atts);
 		} else if (qName.equals("Alignment")) {
 			m_alignment = new Alignment(atts);
+		} else if (qName.equals("NumberFormat")) {
+			m_numberFormat = new NumberFormat(atts);
 		}
 	}
 

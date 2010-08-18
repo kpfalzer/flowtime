@@ -40,26 +40,32 @@ public class Table {
 	public AbstractTableModel getModel() {
 		return new Model();
 	}
-	
+
 	/**
 	 * Model access subclass compatible with AbstractTableModel.
 	 */
 	private class Model extends AbstractTableModel {
 		public int getColumnCount() {
-			return m_colCnt;
+			return getColCnt();
 		}
 
 		public int getRowCount() {
-			return m_rows.size();
+			return m_rows.size() - 1;	//1st row is label
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return getCellAt(rowIndex, columnIndex).getData();
+			//row is +1 offset since 1st row is labels.
+			return getCellAt(rowIndex+1, columnIndex).getData();
 		}
 
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return false;
+		}
+
+		@Override
+		public String getColumnName(int column) {
+			return getCellAt(0, column).getData().toString();
 		}
 	}
 

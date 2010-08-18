@@ -53,8 +53,8 @@ public class TableReader extends XmlReader {
 		}
 	}
 
-	public AbstractTableModel getModel() {
-		return m_table.getModel();
+	public Table getTable() {
+		return m_table;
 	}
 
 	private XMLReader	m_rdr;

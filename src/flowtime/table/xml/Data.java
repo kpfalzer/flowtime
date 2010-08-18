@@ -38,15 +38,19 @@ public class Data {
 	}
 
 	public void addData(String data) {
-		m_data = data;
+		if (m_type.equalsIgnoreCase("string")) {
+			m_data = data;
+		} else if (m_type.equalsIgnoreCase("number")) {
+			m_data = data; //TODO: keep semblance of precision?
+		}
 	}
 
-	public String getData() {
-		return (null == m_data) ? "" : m_data;
+	public Object getData() {
+		return m_data;
 	}
 
-	private final String m_type;
-	private String m_data;
+	private final String	m_type;
+	private Object			m_data;
 
 	private static final String TYPE = "ss:Type";
 }

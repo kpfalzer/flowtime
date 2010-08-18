@@ -53,7 +53,7 @@ public class Cell {
 		return m_style.asStyle();
 	}
 
-	public String getData() {
+	public Object getData() {
 		return m_data.getData();
 	}
 

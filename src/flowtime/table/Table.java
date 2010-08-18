@@ -37,6 +37,8 @@ import  java.awt.event.ComponentAdapter;
 import  java.awt.event.ComponentEvent;
 import  java.awt.GridLayout;
 import	javax.swing.table.TableModel;
+import	javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -62,7 +64,7 @@ public class Table extends JPanel {
 		} else {
 			try {
 				TableReader rdr = new TableReader(xmlFile);
-				m_view = new View(rdr.getModel(), hzSrcoll);
+				m_view = new View(rdr.getTable().getModel(), hzSrcoll);
 			} catch (Exception ex) {
 				error(ex);
 			}
@@ -128,6 +130,7 @@ public class Table extends JPanel {
         }
 		View(TableModel model, boolean hzScroll) {
 			m_table = new JTable(model);
+			m_table.setRowSorter(new TableRowSorter<TableModel>(model));
 			init(hzScroll);
 		}
 		private void init(boolean hzScroll) {
