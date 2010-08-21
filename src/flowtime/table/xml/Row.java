@@ -38,7 +38,6 @@ import	org.xml.sax.SAXException;
 public class Row extends XmlReader.MyContentHandler {
 	public Row(XMLReader rdr, Attributes attr, int colCnt) {
 		super(rdr);
-		assert(0 == attr.getLength());	//dont expect any
 		m_cells = new ArrayList<Cell>(colCnt);
 		rdr.setContentHandler(this);
 	}
